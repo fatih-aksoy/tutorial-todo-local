@@ -1,8 +1,9 @@
 import styles from "./task.module.css";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { TbTrash } from "react-icons/tb";
+import { TbVolume } from "react-icons/tb";
 
-export function Task({ task, onDelete, onComplete }) {
+export function Task({ task, onDelete, onComplete, speakTask }) {
   return (
     <div className={styles.task}>
       <button
@@ -15,6 +16,13 @@ export function Task({ task, onDelete, onComplete }) {
       <p className={task.isCompleted ? styles.textCompleted : ""}>
         {task.title}
       </p>
+      <button>
+        <TbVolume
+          className={styles.listenButton}
+          size={20}
+          onClick={() => speakTask(task.title)}
+        />
+      </button>
 
       <button className={styles.deleteButton} onClick={() => onDelete(task.id)}>
         <TbTrash size={20} />

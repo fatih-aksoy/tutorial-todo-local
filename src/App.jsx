@@ -6,6 +6,7 @@ const LOCAL_STORAGE_KEY = "todo:savedTasks";
 
 function App() {
   const [tasks, setTasks] = useState([]);
+  const [speechSynthesis, setSpeechSynthesis] = useState(null); //! speech
 
   function loadSavedTasks() {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -51,6 +52,24 @@ function App() {
     });
     setTasksAndSave(newTasks);
   }
+  //! speech
+  const speakTask = (task) => {
+    if (speechSynthesis) {
+      const utterance = new SpeechSynthesisUtterance(task);
+      speechSynthesis.speak(utterance);
+    }
+  };
+
+  useEffect(() => {
+    const synth = window.speechSynthesis;
+    setSpeechSynthesis(synth);
+
+    return () => {
+      if (synth && synth.speaking) {
+        synth.cancel();
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -59,13 +78,14 @@ function App() {
         onComplete={toggleTaskCompletedById}
         tasks={tasks}
         onDelete={deleteTaskById}
+        speakTask={speakTask}
       />
     </>
   );
 }
 
 export default App;
-
+// ! to start app "yarn run dev" veya "yarn dev"
 // ! https://github.com/GBDev13
 // ! https://vitejs.dev/guide/  burdan basladik  npm create vite@latest. kurumlardan sonra yarn dev ile actik
 // ! yarn add react-icons
